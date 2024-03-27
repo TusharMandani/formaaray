@@ -7,13 +7,13 @@ import { LoginService } from '../../../Services/login.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   constructor(
     private loginService: LoginService,
     private snackBar: MatSnackBar,
-    private router:Router
+    private router: Router
   ) {}
 
   form = new FormGroup({
@@ -26,38 +26,27 @@ export class LoginComponent {
       this.loginService.submitForm(this.form.value).subscribe(
         (response) => {
           localStorage.setItem('token', response.token);
-          // alert('User login successfully');
-          // this.showSnackbarTopPosition('User login successfully!', null, 3000);
-
-          // this.snackBar.open(
-          //   'User login successfully!',
-          //   'Close',
-          //   {
-          //     duration: 3000,
-          //     verticalPosition: 'top',
-          //   }
-          // );
-
-          this.router.navigate(['/patient']);
-          // Redirect to some protected route
+          if (response.token == undefined) {
+            this.snackBar.open('Failed to login!', 'Close', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
+          } else {
+            this.snackBar.open('User login successfully!', 'Close', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
+            this.router.navigate(['/patient']);
+          }
         },
         (error) => {
-          // alert('Failed to login');
-          // this.showSnackbarTopPosition('Failed to login!', null, 3000);
-
-          // this.snackBar.open(
-          //   'Failed to login!',
-          //   'Close',
-          //   {
-          //     duration: 3000,
-          //     verticalPosition: 'top',
-          //   }
-          // );
+          this.snackBar.open('Failed to login!', 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+          });
         }
       );
     }
     this.form.reset();
-
-    
   }
 }

@@ -27,41 +27,31 @@ export class RegisterComponent {
     if (this.form.valid) {
       this.signupService.submitForm(this.form.value).subscribe(
         (response) => {
-          console.log(response);
-          this.form.reset();
-          //alert("User register successfully")
-          // this.showSnackbarTopPosition(
-          //   'User register successfully!',
-          //   null,
-          //   3000
-          // );
-
-          // this.snackBar.open(
-          //   'User register successfully!',
-          //   'Close',
-          //   {
-          //     duration: 3000,
-          //     verticalPosition: 'top',
-          //   }
-          // );
+          if (response.error) {
+            this.snackBar.open('Failed to user register!', 'Close', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
+            this.form.reset();
+          } else {
+            this.snackBar.open('User register successfully!', 'Close', {
+              duration: 3000,
+              verticalPosition: 'top',
+            });
+            this.form.reset();
+          }
         },
         (error) => {
           this.form.reset();
           // alert('Failed to user register');
           // this.showSnackbarTopPosition('Failed to user register!', null, 3000);
 
-          // this.snackBar.open(
-          //   'Failed to user register!',
-          //   'Close',
-          //   {
-          //     duration: 3000,
-          //     verticalPosition: 'top',
-          //   }
-          // );
+          this.snackBar.open('Failed to user register!', 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+          });
         }
       );
     }
   }
-
- 
 }
