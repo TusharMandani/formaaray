@@ -1,0 +1,30 @@
+
+.container {
+    display: flex;
+    justify-content: center; /* Horizontally center items */
+    height: 100vh; /* Set height to whatever appropriate */
+  }
+
+  
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: auto;
+  }
+  
+  mat-form-field {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  button {
+    align-self: flex-end;
+  }
+  span{
+    margin-left: 5px;
+  }
+
+  .spacer{
+    height: 9vh;
+  }

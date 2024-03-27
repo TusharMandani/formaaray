@@ -1,0 +1,141 @@
+<button mat-icon-button [matMenuTriggerFor]="profileMenu" class="logout">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  
+  <mat-menu #profileMenu="matMenu">
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+
+
+<h2 style="margin-left: 345px">Hospital Management</h2>
+<div
+  class="main"
+  style="display: flex; justify-content: center; align-items: center"
+>
+  <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+    <div formArrayName="patients">
+      <div
+        *ngFor="
+          let patient of patientForm.get('patients').controls;
+          let patientIndex = index
+        "
+        [formGroupName]="patientIndex"
+      >
+        <label>Name: </label>
+        <input type="text" formControlName="name" />
+        <label>Age: </label>
+        <input type="number" formControlName="age" />
+        <label>Sex: </label>
+        <input type="text" formControlName="sex" />
+        <button type="button" (click)="addDisease(patientIndex)">
+          Add Disease
+        </button>
+        <div formArrayName="diseases">
+          <div
+            *ngFor="
+              let disease of patient.get('diseases').controls;
+              let diseaseIndex = index
+            "
+            [formGroupName]="diseaseIndex"
+          >
+            <label>Disease Name: </label>
+            <input type="text" formControlName="diseaseName" />
+            <button
+              type="button"
+              (click)="addMedicine(patientIndex, diseaseIndex)"
+            >
+              Add Medicine
+            </button>
+            <div formArrayName="medicines">
+              <div
+                *ngFor="
+                  let medicine of disease.get('medicines').controls;
+                  let medicineIndex = index
+                "
+                [formGroupName]="medicineIndex"
+              >
+                <label>Medicine Name: </label>
+                <input type="text" formControlName="medicineName" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" (click)="addPatient()">Add Patient</button>
+    &nbsp;
+    <button type="submit" [disabled]="patientForm.invalid">Submit</button>
+  </form>
+</div>
+
+<!-- display data in tabular -->
+
+<hr />
+<br />
+<div class="fetch-data-button-container" style="margin-left: 399px">
+  <button type="button" (click)="fetchData()">Fetch Data</button>
+</div>
+
+<br />
+<div *ngIf="fetchedData">
+  <!-- Display fetched data in a table -->
+
+  <table mat-table [dataSource]="fetchedData" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+    <ng-container matColumnDef="age">
+      <th mat-header-cell *matHeaderCellDef>Age</th>
+      <td mat-cell *matCellDef="let element">{{ element.age }}</td>
+    </ng-container>
+    <ng-container matColumnDef="sex">
+      <th mat-header-cell *matHeaderCellDef>Sex</th>
+      <td mat-cell *matCellDef="let element">{{ element.sex }}</td>
+    </ng-container>
+    <ng-container matColumnDef="diseases">
+      <th mat-header-cell *matHeaderCellDef>Diseases</th>
+      <td mat-cell *matCellDef="let element">
+        <ul style="list-style-type: none; padding-left: 0">
+          <li *ngFor="let disease of element.diseases">
+            {{ disease.diseaseName }}
+          </li>
+        </ul>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="medicines">
+      <th mat-header-cell *matHeaderCellDef>Medicines</th>
+      <td mat-cell *matCellDef="let element">
+        <ul style="list-style-type: none; padding-left: 0">
+          <li *ngFor="let disease of element.diseases">
+            <ul style="list-style-type: none; padding-left: 0">
+              <li *ngFor="let medicine of disease.medicines">
+                {{ medicine.medicineName }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editRecord(element)">
+          Edit
+        </button>
+        &nbsp;
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="deleteRecord(element._id)"
+        >
+          Delete
+        </button>
+      </td>
+    </ng-container>
+    <!-- Add more columns as needed -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>
