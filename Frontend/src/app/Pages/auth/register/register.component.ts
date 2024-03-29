@@ -16,6 +16,11 @@ export class RegisterComponent {
     private router: Router
   ) {}
 
+  hide:boolean = true;
+  togglePasswordVisibility(){
+    this.hide = !this.hide
+  }
+
   form = new FormGroup({
     firstName: new FormControl('', Validators.required),
     lastName: new FormControl('', Validators.required),

@@ -16,6 +16,12 @@ export class LoginComponent {
     private router: Router
   ) {}
 
+  hide:boolean = true;
+  togglePasswordVisibility(){
+    this.hide = !this.hide
+  }
+
+
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),

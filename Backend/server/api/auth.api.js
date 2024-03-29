@@ -2,6 +2,8 @@ const userModel = require("@models/user.model").Schema;
 
 const jwt = require("jsonwebtoken");
 
+const bcrypt = require("bcrypt");
+
 const secretKey = process.env.JWT_SECRET;
 
 // const formValidator = require("@validator/form.validator");
@@ -28,13 +30,16 @@ module.exports = {
                 .code(400);
             }
 
+            // hash password
+
+            const hashPassword = await bcrypt.hash(password, 10);
             // create new user
 
             const user = new userModel({
               firstName,
               lastName,
               email,
-              password,
+              password: hashPassword,
             });
             await user.save();
             return h
@@ -71,9 +76,9 @@ module.exports = {
             }
             // Validate password
 
-            // const validPassword = await bcrypt.compare(password, User.password);
+            const validPassword = await bcrypt.compare(password, user.password);
 
-            if (user.password !== password) {
+            if (!validPassword) {
               return h
                 .response({ message: "Invalid email or password" })
                 .code(500);
@@ -91,6 +96,54 @@ module.exports = {
     ],
     handler: async (request, h) => {
       return h.response(request.pre.userLogin).code(200);
+    },
+  },
+
+  resetPassword: {
+    pre: [
+      {
+        assign: "resetPassword",
+        method: async (request, h) => {
+          try {
+            const { email, oldPassword, newPassword } = request.payload;
+
+            // console.log(request.payload);
+
+            const user = await userModel.findOne({ email });
+
+            // console.log(user)
+
+            if (!user) {
+              return h.response({ message: "User not found" }).code(400);
+            }
+
+            const passwordMatch = await bcrypt.compare(
+              oldPassword,
+              user.password
+            );
+
+            // console.log(passwordMatch)
+
+            if (!passwordMatch) {
+              return h.response({ message: "Invalid oldpassword!" });
+            }
+
+            // Hash the new password before saving
+
+            const hashNewPassword = await bcrypt.hash(newPassword, 10);
+            user.password = hashNewPassword;
+
+            await user.save();
+
+            return h.response({ message: "Password reset succesfully!" });
+          } catch (error) {
+            return h.response({ message: "Internal server error!" });
+          }
+        },
+      },
+    ],
+    handler: async (request, h) => {
+      return h.response(request.pre.resetPassword).code(200);
     },
   },
 };

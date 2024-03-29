@@ -11,13 +11,18 @@ form {
     flex-direction: column;
     max-width: 300px;
     margin: auto;
+    margin-top: 50px;
   }
   
   mat-form-field {
     margin-bottom: 20px;
     width: 100%;
   }
-  
+  a {
+    text-decoration: none;
+    color: #007bff; 
+    transition: color 0.3s ease;
+  }
   button {
     align-self: flex-end;
   }

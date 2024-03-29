@@ -4,12 +4,10 @@
     </mat-form-field>
   
     <mat-form-field>
-      <input
-        matInput
-        type="password"
-        placeholder="Password"
-        formControlName="password"
-      />
+      <input matInput type="{{hide?'password':'text'}}" placeholder="Enter password" formControlName="password" />
+      <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
     </mat-form-field>
   
     <button
@@ -23,6 +21,9 @@
   
     <p>
       Not account?<span><a routerLink="/register">Singup</a></span>
+    </p>
+    <p class="forgot-password">
+      <a routerLink="/forgetpassword">Forget Password?</a>
     </p>
   </form>
   
