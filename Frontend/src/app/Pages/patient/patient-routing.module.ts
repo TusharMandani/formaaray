@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { PatientComponent } from './patient/patient.component';
 import { activateGuard } from '../../Guards/activate.guard';
 
+
 const routes: Routes = [
   {
     path:'patient',
     component:PatientComponent,
     canActivate:[activateGuard]
-  }
+  },
+ 
 ];
 
 @NgModule({
