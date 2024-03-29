@@ -10,11 +10,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MatTableModule } from '@angular/material/table';
 import { PatientModule } from './Pages/patient/patient.module';
 import { MaterialModule } from './material/material.module';
+import { PagenotfoundComponent } from './Pages/pagenotfound/pagenotfound.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    PagenotfoundComponent,
   
   ],
   imports: [
