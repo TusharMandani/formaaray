@@ -44,6 +44,7 @@ export class RegisterComponent {
               verticalPosition: 'top',
             });
             this.form.reset();
+            this.router.navigate(['/login'])
           }
         },
         (error) => {
